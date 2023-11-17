@@ -27,7 +27,7 @@ This repository contains a basic Node.js web application used for testing.
 
 2. Change into the HelloLoggingNodeJS folder and open the index.js in the Cloud Shell code editor:
 ```
-cdHelloLoggingNodeJS
+cd HelloLoggingNodeJS
 edit index.js
 ```
 4. In the cloud shell code editor, look at the app.yaml file.
