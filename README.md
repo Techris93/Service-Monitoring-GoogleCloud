@@ -70,7 +70,7 @@ In this task, the following will be performed:
 
 2. In the new tab, use a simple bash while loop to generate load on your application:
 ```
-whiletrue; \
+while true; \
 docurl -s https://$DEVSHELL_PROJECT_ID.appspot.com/random-error \
 -w '\n';sleep .1s;done
 ```
