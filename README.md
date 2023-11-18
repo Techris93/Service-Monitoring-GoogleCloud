@@ -36,6 +36,8 @@ App Engine standard uses this file to define the runtime required by the applica
 5. In the cloud shell code editor, look at the package.json file.
 Not only does this define the Node.js application dependencies, but it also defines the start script App Engine uses to serve requests.
 
+![image](https://i.imgur.com/xWVm8iO.png)
+
 6. Return to the Cloud Shell window. If the Cloud Shell is not visible, click Open Terminal.
 	
 7. In the Cloud Shell terminal, create a new App Engine app:
@@ -50,11 +52,15 @@ gcloud app deploy
 ```
 Wait until the deploy completes before moving on.
 
+![image](https://i.imgur.com/XBS6Iu8.png)
+
 9. When prompted, type `y` and press `Enter`.
 
 10. Copy the URL to your newly deployed app from the console and open it in a new browser tab.
 
 11. Verify a Hello World! response.
+
+![image](https://i.imgur.com/boB6bfP.png)
 
 **Task 2. Use Service Monitoring to create an availability SLO**
 
@@ -89,31 +95,36 @@ We have a working App Engine application that is currently throwing an error app
 3. Use the Navigation menu to navigate to Error Reporting.
 
 4. Use the Navigation menu to navigate to Monitoring.
+
 It takes a moment for the monitoring workspace to create.
 
-5. Once it loads, click Services.
+6. Once it loads, click Services.
 
-6. Notice that Service Monitoring already sees your default App Engine application. If it doesn't, wait a minute and refresh the page until it appears in the table.
+7. Notice that Service Monitoring already sees your default App Engine application. If it doesn't, wait a minute and refresh the page until it appears in the table.
 
-7. Click the default App Engine application to drill into it.
+8. Click the default App Engine application to drill into it.
 
-8. Click +Create SLO to start the new SLO dialog.
+9. Click `+Create SLO` to start the new SLO dialog.
 
-9. Select the Availability metric, leave the evaluation method set to Request-based, and then click Continue.
+10. Select the Availability metric, leave the evaluation method set to Request-based, and then click Continue.
 
-10. Take a moment to investigate the details the SLI details displayed, then click Continue.
+11. Take a moment to investigate the details the SLI details displayed, then click Continue.
 
-11. To define the SLO, set the Period type to Rolling and the Period length to 7 days to calculate the SLO on a constantly moving 7-day window of time.
+12. To define the SLO, set the Period type to Rolling and the Period length to 7 days to calculate the SLO on a constantly moving 7-day window of time.
 
-12. Set the Goal to 99.5% and the charts fill in, though it's typically difficult to see that 99.5 to 99.9 difference.
+13. Set the Goal to 99.5% and the charts fill in, though it's typically difficult to see that 99.5 to 99.9 difference.
 
-13. Click the red dashed line, and the chart will zoom in to make things easier to see.
+14. Click the red dashed line, and the chart will zoom in to make things easier to see.
 
-14. Click Continue, notice the default name, and submit the new SLO by clicking Create SLO.
+15. Click Continue, notice the default name, and submit the new SLO by clicking Create SLO.
+
+![image](https://i.imgur.com/98hgS1q.png)
 
 **Investigate the new SLO and create an alert for it**
 
 • Under the Current status of 1 SLO section, expand the new SLO and investigate the information it displays. Move between the three tabs, Service level indicator, Error budget, and Alerts firing, investigating each.
+
+![image](https://i.imgur.com/DUdg6Pz.png)
 
 **Create an alert tied to the availability SLO**
 
@@ -128,13 +139,13 @@ There are several ways to create an alert for an SLO in Service Monitoring.
 	
  4. Click Next.
 
- 5. Click on drop down arrow next to Notification Channels, then click on Manage Notification Channels.
+ 5. Click on the drop-down arrow next to Notification Channels, then click on Manage Notification Channels.
 
-A Notification channels page will open in new tab.
+A Notification channels page will open in a new tab.
 
 6. Scroll down the page and click on ADD NEW for Email.
 	
- 7. In Create Email Channel dialog box, enter your personal email address in the Email Address field and a Display name.
+ 7. In the Create Email Channel dialog box, enter your personal email address in the Email Address field and a Display name.
 	
  8. Click on Save.
 	
@@ -150,38 +161,45 @@ A Notification channels page will open in new tab.
 
 14. On the SLO page, switch back to the Service level indicator tab. It should not display our alert as a red dotted line.
 
-15. Once again, clicking the line will zoom in the view. In the upper-right corner of the page, click Auto Refresh so the charts update automatically.
+15. Once again, clicking the line will zoom in view. In the upper-right corner of the page, click Auto Refresh so the charts update automatically.
 
 **Trigger the alert**
 
-Modify our application and trigger the alert.
+Modify the application and trigger the alert.
 
-1. Switch back to your Cloud Shell view and Open Editor, if it's not already displayed, and re-open index.js.
+1. Switch back to the Cloud Shell view, Open the Editor, if it's not already displayed, and re-open index.js.
 
 2. Scroll to the /random-error route found at approximately line 126 and modify the value next to Math.random from 1000 to 20.
 
 So instead of generating an error every 1000 requests, we are not going to get an error every 20 requests. That will drop our availability from 99.9$ to about 95%, which should trigger the alert.
 
+![image](https://i.imgur.com/lBwd70i.png)
+
 3. Close the Cloud Shell code editor and switch to the terminal window.
-You have two tabs, one that's running the test loop and one that's standard.
 
-4. In the standard (non-busy) tab, redeploy the change to App Engine:
+There are two tabs, one that's running the test loop and one that's standard.
+
+5. In the standard (non-busy) tab, redeploy the change to App Engine:
+```
 gcloud app deploy
+```
 
-
-5. When prompted, type y and press Enter.
+6. When prompted, type `y` and press Enter.
 	
- 6. Once the redeploy completes, switch to the tab running the test loop and verify the uptick in errors.
+ 7. Once the redeploy completes, switch to the tab running the test loop and verify the uptick in errors.
 	
- 7. Switch back to the your Service Monitoring page and in the upper-right corner, verify a green check next to auto refresh.
+ 8. Switch back to the Service Monitoring page and in the upper-right corner, verify a green check next to auto-refresh.
 	
- 8. Verify that your SLO is expanded and that you can see the Service level indicator.
+ 9. Verify that the SLO is expanded and that the Service level indicator can be seen.
 
 After a few minutes, the SLI value and chart should show clearly the decrease in performance down to about the 95% level. Within a few minutes, you should also receive the alert notification email.
 
-Note:You may see your error budget quickly drop disproportionately. The error budget calculation is made over the whole SLO window, which should be a rolling period of 7 days, but because you just started the application, your total dataset is very small, thus causing the SLO interface to display a much larger decrease in your error budget than is really happening.
+![image](https://i.imgur.com/lBwd70i.png)
 
-If you fixed the problem, the error budget would rapidly fill back up and you would see you actually have budget remaining, though it might take a couple of days to show that.
+Note: You may see your error budget quickly drop disproportionately. The error budget calculation is made over the whole SLO window, which should be a rolling period of 7 days, but because you just started the application, your total dataset is very small, thus causing the SLO interface to display a much larger decrease in your error budget than is really happening.
 
-Congratulations! You used Service Monitoring to create an availability related SLO and corresponding alert. Nice job.
+If the problem is fixed, the error budget will rapidly fill back up and the actual budget remaining will be seen, though it might take a couple of days to show that.
+
+## References
+https://www.cloudskillsboost.google
 
