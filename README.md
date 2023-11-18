@@ -194,7 +194,7 @@ gcloud app deploy
 
 After a few minutes, the SLI value and chart should show clearly the decrease in performance down to about the 95% level. Within a few minutes, you should also receive the alert notification email.
 
-![image](https://i.imgur.com/lBwd70i.png)
+![image](https://i.imgur.com/I89LCLr.png)
 
 Note: You may see your error budget quickly drop disproportionately. The error budget calculation is made over the whole SLO window, which should be a rolling period of 7 days, but because you just started the application, your total dataset is very small, thus causing the SLO interface to display a much larger decrease in your error budget than is really happening.
 
